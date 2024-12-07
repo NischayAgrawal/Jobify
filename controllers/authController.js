@@ -16,6 +16,7 @@ export const register = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ msg: "user created" });
 };
 
+//login auth
 export const login = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) throw new UnauthorizedError("invalid credentials");
