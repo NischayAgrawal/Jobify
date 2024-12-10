@@ -24,7 +24,7 @@ export const login = async (req, res) => {
   const isPasswordCorrect = await comparePassword(req.body.password, user.password);
   if (!isPasswordCorrect) throw new UnauthorizedError("invalid credentials");
 
-  const token = createJWT({ userID: user._id, role: user.role });
+  const token = createJWT({ userId: user._id, role: user.role });
 
   //cookie's expiration time is in millisecond we can't pass string like '1h' or '1d' like we used to do in JWT. hence the conversion in the below line.
   const oneDay = 1000 * 60 * 60 * 24;

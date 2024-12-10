@@ -5,18 +5,19 @@ import express from "express";
 const app = express();
 import morgan from "morgan";
 import mongoose from "mongoose";
-
+import cookieParser from "cookie-parser";
 //routers
 import authRouter from "./routes/authRouter.js";
 import jobRouter from "./routes/jobRouter.js";
 
 //middleware
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
+import { authenticateUser } from "./middlewares/authMiddleware.js";
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-
+app.use(cookieParser());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 //CRUD is handled in the next line alone for the jobRouter
-app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/auth", authRouter);
 
 app.use("*", (req, res) => {
