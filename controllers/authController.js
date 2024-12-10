@@ -17,7 +17,7 @@ export const register = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ msg: "user created" });
 };
 
-//login auth sjdhnajsdhajksdhjikasdhasd
+//login auth
 export const login = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) throw new UnauthorizedError("invalid credentials");
@@ -26,5 +26,13 @@ export const login = async (req, res) => {
 
   const token = createJWT({ userID: user._id, role: user.role });
 
-  res.json({ token });
+  //cookie's expiration time is in millisecond we can't pass string like '1h' or '1d' like we used to do in JWT. hence the conversion in the below line.
+  const oneDay = 1000 * 60 * 60 * 24;
+  res.cookie("token", token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    secure: process.env.NODE_ENV === "production",
+  });
+
+  res.status(StatusCodes.OK).json({ msg: "user logged in" });
 };
