@@ -17,7 +17,7 @@ export const register = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ msg: "user created" });
 };
 
-//login auth
+//login functionality
 export const login = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) throw new UnauthorizedError("invalid credentials");
@@ -35,4 +35,14 @@ export const login = async (req, res) => {
   });
 
   res.status(StatusCodes.OK).json({ msg: "user logged in" });
+};
+
+//logout functionality
+
+export const logout = (req, res) => {
+  res.cookie("token", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  }),
+    res.status(StatusCodes.OK).json({ msg: "user logged out!" });
 };
