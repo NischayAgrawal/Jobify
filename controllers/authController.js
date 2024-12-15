@@ -6,6 +6,7 @@ import { createJWT } from "../utils/tokenUtils.js";
 
 //register auth
 export const register = async (req, res) => {
+  //Make the first account admin
   const isFirstAccount = (await User.countDocuments()) === 0;
   req.body.role = isFirstAccount ? "admin" : "user";
 
