@@ -1,6 +1,6 @@
-import { Link, Form, redirect, useNavigation } from "react-router-dom";
+import { Link, Form, redirect, useNavigate } from "react-router-dom";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
-import { FormRow, Logo } from "../components";
+import { FormRow, Logo, SubmitBtn } from "../components";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 
@@ -18,22 +18,40 @@ export const action = async ({ request }) => {
 };
 
 const Login = () => {
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const navigate = useNavigate();
+  const loginDemoUser = async () => {
+    const data = {
+      email: "test@test.com",
+      password: "secret123",
+    };
+    try {
+      await customFetch.post("/auth/login", data);
+      toast.success("Take a test drive");
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+  };
+
   return (
     <Wrapper>
       <Form method="post" className="form">
         <Logo />
         <h4>Login</h4>
-        <FormRow type="email" name="email" defaultValue="john@gmail.com"></FormRow>
-        <FormRow type="password" name="password" defaultValue="secret123"></FormRow>
-        <button type="submit" className="btn btn-block" disabled={isSubmitting}>
-          {isSubmitting ? "submitting" : "submit"}
-        </button>
+        <FormRow
+          type="email"
+          name="email"
+          defaultValue="john@gmail.com"
+        ></FormRow>
+        <FormRow
+          type="password"
+          name="password"
+          defaultValue="secret123"
+        ></FormRow>
+        <SubmitBtn />
 
-        {/* ------IT WAS A SELF ATTEMPT------ */}
-        <button type="button" className="btn btn-block">
-          <Link to="/dashboard">Explore The App</Link>
+        <button type="button" className="btn btn-block" onClick={loginDemoUser}>
+          Explore The App
         </button>
         <p>
           Not a member yet?
