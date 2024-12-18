@@ -1,9 +1,9 @@
 import React from "react";
-import { FormRow, FormRowSelect } from "../components";
+import { FormRow, FormRowSelect, SubmitBtn } from "../components";
 import Wrapper from "../assets/wrappers/DashboardFormPage";
 import { useOutletContext } from "react-router-dom";
 import { JOB_STATUS, JOB_TYPE } from "../../../utils/constants";
-import { Form, useNavigation, redirect } from "react-router-dom";
+import { Form, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 
@@ -23,8 +23,6 @@ export const action = async ({ request }) => {
 
 const AddJob = () => {
   const { user } = useOutletContext();
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
 
   return (
     <Wrapper>
@@ -33,13 +31,25 @@ const AddJob = () => {
         <div className="form-center">
           <FormRow type="text" name="position" />
           <FormRow type="text" name="company" />
-          <FormRow type="text" labelText="job location" name="jobLocation" defaultValue={user.location} />
-          <FormRowSelect labelText="job status" name="jobStatus" defaultValue={JOB_STATUS.PENDING} list={Object.values(JOB_STATUS)} />
-          <FormRowSelect name="jobType" labelText="job type" defaultValue={JOB_TYPE.FULL_TIME} list={Object.values(JOB_TYPE)} />
-
-          <button type="submit" className="btn btn-block form-btn " disabled={isSubmitting}>
-            {isSubmitting ? "submitting..." : "submit"}
-          </button>
+          <FormRow
+            type="text"
+            labelText="job location"
+            name="jobLocation"
+            defaultValue={user.location}
+          />
+          <FormRowSelect
+            labelText="job status"
+            name="jobStatus"
+            defaultValue={JOB_STATUS.PENDING}
+            list={Object.values(JOB_STATUS)}
+          />
+          <FormRowSelect
+            name="jobType"
+            labelText="job type"
+            defaultValue={JOB_TYPE.FULL_TIME}
+            list={Object.values(JOB_TYPE)}
+          />
+          <SubmitBtn formBtn />
         </div>
       </Form>
     </Wrapper>
